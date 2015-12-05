@@ -1,0 +1,21 @@
+#BlueJ class context
+comment0.params=
+comment0.target=Piano()
+comment1.params=note
+comment1.target=int\ xFromNote(int)
+comment1.text=\n\ Returns\ the\ center\ X\ location\ of\ a\ given\ note\ on\ the\ piano\n
+comment2.params=g
+comment2.target=void\ paintComponent(java.awt.Graphics)
+comment3.params=note
+comment3.target=boolean\ noteIsBlack(int)
+comment4.params=i
+comment4.target=boolean\ noteInCurrentScaleIsBlack(int)
+comment5.params=i
+comment5.target=int\ noteInCurrentScale(int)
+comment5.text=\n\ Returns\ the\ Synthesizer\ note\ for\ a\ value\ in\ the\ current\ scale\n
+comment6.params=kc
+comment6.target=int\ mapKeyToChromaticNote(int)
+comment7.params=kc
+comment7.target=int\ mapKeyToNote(int)
+comment7.text=\n\ Turns\ a\ KeyEvent\ integer\ into\ a\ Synthesizer\ note\ value\n
+numComments=8

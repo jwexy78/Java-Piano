@@ -1,0 +1,22 @@
+#BlueJ class context
+comment0.params=
+comment0.target=Thought()
+comment1.params=frag
+comment1.target=void\ add(Fragment)
+comment2.params=thought
+comment2.target=void\ add(Thought)
+comment3.params=thought
+comment3.target=void\ append(Thought)
+comment4.params=
+comment4.target=int\ length()
+comment5.params=
+comment5.target=java.lang.String\ blankLengthString()
+comment6.params=
+comment6.target=void\ tick()
+comment7.params=color
+comment7.target=void\ setColor(int)
+comment8.params=
+comment8.target=boolean\ hasMore()
+comment9.params=
+comment9.target=int\ getBPM()
+numComments=10
