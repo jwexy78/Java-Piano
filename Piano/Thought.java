@@ -2,8 +2,9 @@ import java.util.ArrayList;
 public class Thought
 {
     public ArrayList<AudioPlayer> audioPlayers;
-    private int itr;
+    public int itr;
     public int bpm;
+    public double currentBeatPercentage;
     public Thought()
     {
         audioPlayers = new ArrayList<AudioPlayer>();
@@ -24,7 +25,10 @@ public class Thought
         String bls = blankLengthString();
         for(AudioPlayer p : thought.audioPlayers)
         {
-            audioPlayers.add(new AudioPlayer(new Fragment(bls + p.fragment.getFullString())));
+            Fragment f = new Fragment(bls + p.fragment.getFullString());
+            f.color = p.fragment.color;
+            f.partialVolume = p.fragment.partialVolume;
+            audioPlayers.add(new AudioPlayer(f));
         }
     }
     public int length()
@@ -47,6 +51,7 @@ public class Thought
     }
     public void tick()
     {
+        itr++;
         for(AudioPlayer p : audioPlayers)
         {
             if(p.running)
@@ -77,5 +82,51 @@ public class Thought
     public int getBPM()
     {
         return bpm;
+    }
+    public int[][] shortChannels()
+    {
+        int[][] output = new int[audioPlayers.size()][10];
+        for(int i = 0; i < audioPlayers.size(); i++)
+        {
+            for(int j = 0; j < Math.min(audioPlayers.get(i).fragment.length() - itr, 10); j++)
+            {
+                if(itr != 0)
+                    output[i][j] = audioPlayers.get(i).fragment.notes[itr+j-1];
+            }
+            if(output[i][0] == Fragment.HOLD)
+            {
+                for(int k = itr-1; k > -1; k--)
+                {
+                    if(audioPlayers.get(i).fragment.notes[k] != Fragment.HOLD)
+                    {
+                        output[i][0] = audioPlayers.get(i).fragment.notes[k];
+                        break;
+                    }
+                }
+            }
+        }
+        return output;
+    }
+    public String toString()
+    {
+        String output = "{\n";
+        for(AudioPlayer p : audioPlayers)
+        {
+            output += p.fragment.toString() +"\n";
+        }
+        output += "}";
+        return output;
+    }
+    public String stringFromBeat(int beat)
+    {
+        String output = "{\n";
+        for(AudioPlayer p : audioPlayers)
+        {
+            if(p.fragment.toString().length() > beat * 2)
+                output += p.fragment.toString().substring(beat * 2);
+            output += "\n";
+        }
+        output += "}";
+        return output;
     }
 }

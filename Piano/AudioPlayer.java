@@ -20,7 +20,8 @@ public class AudioPlayer
     {
         if(!fragment.hasNextNote())
         {
-            Screen.endNote(previousNote);
+            if(previousNote != -1)
+                Screen.endNote(previousNote);
             running = false;
             return;
         }

@@ -13,21 +13,24 @@ import java.awt.event.*;
 
 public class Piano extends JComponent
 {
-    
+    public static final int TOP_HEIGHT = 300;
     public static final int KEY_WIDTH = 35;
     public static final int KEY_HEIGHT = 200;
     public static final int BLACK_KEY_WIDTH = 20;
     public static final int BLACK_KEY_HEIGHT = 100;
+    public static final int BLOCK_HEIGHT = 50;
+    public static final int ROUNDING = 20;
     public static final int MAX_VOLUME = 80;
     public static final String keyboard = "asdfghjkl;\"";
     public static final String fullKeyboard = "awsedftgyhujkolp;\"]E";
+    public static Thought thoughtToDraw;
     private static int[] graphicsForNote;
     public static int octave;
     private static final Color[] colors = new Color[] {Color.YELLOW,Color.GREEN,Color.BLUE,Color.ORANGE, Color.MAGENTA};
     public Piano()
     {
-        this.setPreferredSize(new Dimension(KEY_WIDTH * 30,KEY_HEIGHT));
-        graphicsForNote = new int[100];
+        this.setPreferredSize(new Dimension(KEY_WIDTH * 30,KEY_HEIGHT + TOP_HEIGHT));
+        graphicsForNote = new int[150];
     }
     /**
      * Returns the center X location of a given note on the piano
@@ -58,14 +61,68 @@ public class Piano extends JComponent
         }
         return (int)(scaler * KEY_WIDTH);
     }
-    public void paintComponent(Graphics g)
+    public void paintComponent(Graphics gf)
     {
+        Graphics2D g = (Graphics2D) gf;
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setColor(Color.BLACK);
+        g.fillRect(0,0,KEY_WIDTH * 30, TOP_HEIGHT);
+        
+        if(thoughtToDraw != null)
+        {
+            int[][] arr = thoughtToDraw.shortChannels();
+            for(int j = 0; j < arr.length; j++)
+            {
+                for(int i = 0; i < 10; i++)
+                {
+                    if(arr[j][i] != Fragment.REST && arr[j][i] != Fragment.HOLD)
+                    {
+                        //g.setColor(colors[1]);
+                        g.setColor(colors[ (thoughtToDraw.audioPlayers.get(j).fragment.color)-1]);
+                        int note = arr[j][i];
+                        
+                        int height = 1;
+                        for(int a = i+1; a < 10; a++)
+                        {
+                            if(arr[j][a] == Fragment.HOLD)
+                                height++;
+                            else
+                                break;
+                        }
+                        
+                        if(noteIsBlack(note))
+                        {
+                            g.fillRoundRect(xFromNote(arr[j][i]) - BLACK_KEY_WIDTH/2,(int)(TOP_HEIGHT - (i + height - thoughtToDraw.currentBeatPercentage) * BLOCK_HEIGHT),BLACK_KEY_WIDTH,height * BLOCK_HEIGHT,ROUNDING,ROUNDING);
+                        }
+                        else
+                        {
+                            g.fillRoundRect(xFromNote(arr[j][i]) - KEY_WIDTH/2,(int)(TOP_HEIGHT - (i + height - thoughtToDraw.currentBeatPercentage) * BLOCK_HEIGHT),KEY_WIDTH,height * BLOCK_HEIGHT,ROUNDING,ROUNDING);
+                        }
+                    }
+                }
+            }
+        }
+        
+        g.setColor(Color.WHITE);
+        g.fillRect(0,TOP_HEIGHT,30 * KEY_WIDTH, KEY_HEIGHT);
         g.setColor(Color.BLACK);
         for(int i = 0; i < 30; i++)
         {
-            g.drawRect(i * KEY_WIDTH,0,KEY_WIDTH,KEY_HEIGHT);
+            g.drawRect(i * KEY_WIDTH,TOP_HEIGHT,KEY_WIDTH,KEY_HEIGHT);
         }
         
+        
+        for(int i = 1; i < 100; i++)
+        {
+            if(Screen.notes[i] != 0)
+            {
+                g.setColor(colors[Screen.notes[i]-1]);
+                if(!noteIsBlack(i))
+                {
+                    g.fillRect(xFromNote(i) - KEY_WIDTH / 2+1,TOP_HEIGHT,KEY_WIDTH-1,KEY_HEIGHT);
+                }
+            }
+        }
         
         g.setColor(Color.BLACK);
         
@@ -74,11 +131,11 @@ public class Piano extends JComponent
             
             for(int i = j - 1; i < j + 2; i++)
             {
-                g.fillRect(KEY_WIDTH * i - BLACK_KEY_WIDTH / 2,0, BLACK_KEY_WIDTH,BLACK_KEY_HEIGHT);
+                g.fillRect(KEY_WIDTH * i - BLACK_KEY_WIDTH / 2,TOP_HEIGHT, BLACK_KEY_WIDTH,BLACK_KEY_HEIGHT);
             }
             for(int i = j + 3; i < j + 5; i++)
             {
-                g.fillRect(KEY_WIDTH * i - BLACK_KEY_WIDTH / 2,0, BLACK_KEY_WIDTH,BLACK_KEY_HEIGHT);
+                g.fillRect(KEY_WIDTH * i - BLACK_KEY_WIDTH / 2,TOP_HEIGHT, BLACK_KEY_WIDTH,BLACK_KEY_HEIGHT);
             }
         }
         
@@ -90,11 +147,7 @@ public class Piano extends JComponent
                 g.setColor(colors[Screen.notes[i]-1]);
                 if(noteIsBlack(i))
                 {
-                    g.fillRect(xFromNote(i) - BLACK_KEY_WIDTH / 2+1,0,BLACK_KEY_WIDTH,BLACK_KEY_HEIGHT);
-                }
-                else
-                {
-                    g.fillRect(xFromNote(i) - KEY_WIDTH / 2+1,BLACK_KEY_HEIGHT,KEY_WIDTH-1,KEY_HEIGHT - BLACK_KEY_HEIGHT);
+                    g.fillRect(xFromNote(i) - BLACK_KEY_WIDTH / 2+1,TOP_HEIGHT,BLACK_KEY_WIDTH,BLACK_KEY_HEIGHT);
                 }
             }
         }
@@ -107,12 +160,12 @@ public class Piano extends JComponent
                 if(Piano.noteInCurrentScaleIsBlack(i))
                 {
                     g.setColor(Color.WHITE);
-                    g.drawString(keyboard.substring(i,i+1),xLoc,BLACK_KEY_HEIGHT - 10);
+                    g.drawString(keyboard.substring(i,i+1),xLoc,TOP_HEIGHT+BLACK_KEY_HEIGHT - 10);
                 }
                 else
                 {
                     g.setColor(Color.BLACK);
-                    g.drawString(keyboard.substring(i,i+1),xLoc,KEY_HEIGHT - 10);
+                    g.drawString(keyboard.substring(i,i+1),xLoc,TOP_HEIGHT+KEY_HEIGHT - 10);
                 }
             }
         }
@@ -127,15 +180,17 @@ public class Piano extends JComponent
                         g.setColor(Color.BLACK);
                     else
                         g.setColor(Color.WHITE);
-                    g.drawString(fullKeyboard.substring(i,i+1),xLoc,BLACK_KEY_HEIGHT - 10);
+                    g.drawString(fullKeyboard.substring(i,i+1),xLoc,TOP_HEIGHT+BLACK_KEY_HEIGHT - 10);
                 }
                 else
                 {
                     g.setColor(Color.BLACK);
-                    g.drawString(fullKeyboard.substring(i,i+1),xLoc,KEY_HEIGHT - 10);
+                    g.drawString(fullKeyboard.substring(i,i+1),xLoc,TOP_HEIGHT+KEY_HEIGHT - 10);
                 }
             }
         }
+        
+        
     }
     public static boolean noteIsBlack(int note)
     {

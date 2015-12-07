@@ -97,47 +97,181 @@ public class Screen
         });
         frame.show();
         
-        //On-Off error testing
-        Thought test = new Thought();
-        test.bpm = 60;
-        Fragment up = new Fragment("626160595859606162616059585960");
-        Fragment down = new Fragment("60606060606060606060606060606060");
-        test.add(down);
-        test.add(up);
-        //playThought(test);
+        
+        pause(1000);
+        playThought(insideOut());
+        
+        //Thought bwu = blueWarmup();
+        //Piano.thoughtToDraw = bwu;
+        //playThought(bwu);
+        
+    }
+    private static Thought letItGo()
+    {
+        Piano.octave = -1;
+        
+        Fragment bass1 = new Fragment("");
+        Fragment bass2 = new Fragment("");
+        Fragment bass3 = new Fragment("");
+        
+        Fragment melody1 = new Fragment("");
+        Fragment melody2 = new Fragment("");
+        
+        Fragment bells1 = new Fragment("");
+        Fragment bells2 = new Fragment("");
+        Fragment bells3 = new Fragment("");
+        
+        bass1.color = bass2.color = bass3.color = 2;
+        bells1.color = bells2.color = 1;
+        melody1.color = melody2.color = 5;
+        
+        bass1 = bass1.append(new Fragment("55515348").expand(8).loop(5)).append(new Fragment("555148").expand(8));
+        bass2 = bass1.shift(7);
+        bass3 = bass3.append(new Fragment(bass1.blankLengthString()));
+        
+        bass1 = bass1.append(new Fragment("1111111111115311"));
+        bass2 = bass2.append(new Fragment("1111111111111160"));
+        bass3 = bass3.append(new Fragment("0000000000000000"));
+        
+        bells1 = bells1.append(new Fragment("6970626911701111697062701169116067696067116911606511111163111111").shift(12));
+        bells1 = bells1.append(new Fragment("6970626911701111697062701169116067696067116911606511111164111111").shift(12));
+        
+        bells3 = bells3.append(new Fragment(bells1.blankLengthString()));
+        bells3 = bells3.append(bells1);
+        bells3 = bells3.append(new Fragment("6970626911701111706962701169116067696067116911606511111163111111").shift(12));
+        bells3 = bells3.append(new Fragment("6970626911701111706962701169116000000000").shift(12));
+        
+        bells1 = bells1.append(new Fragment("0000").loop(58));
+        bells1 = bells1.append(new Fragment("651111117211111177111111"));
+        bells1 = bells1.append(new Fragment("0000").loop(39));
+        
+        bells3 = bells3.append(new Fragment("0000").loop(39));
+        bells3 = bells3.append(new Fragment("000000000000000000000000"));
+        
+        bells2 = bells2.append(new Fragment(bells1.blankLengthString()));
+        
+        bells3.partialVolume = .6;
+        bells2.partialVolume = .6;
+        
+        melody1 = melody1.append(new Fragment("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000060"));
+        melody1 = melody1.append(new Fragment("6211621162116262625858581111585860621111115857551111111111111160"));
+        melody1 = melody1.append(new Fragment("6262626211116565116211111111585860621111116260621111111111111111"));
+        melody2 = melody2.append(new Fragment(melody1.blankLengthString()));
+        melody1 = melody1.append(new Fragment("0000626211651167116511621165116511651163116211636211111111111111"));
+        melody2 = melody2.append(new Fragment("0000555511551160116011601160115811581158115811115511111111111111"));
+        
+        melody1 = melody1.append(new Fragment("0000626260581160111160626011581160111111111111111111111111111111"));
+        melody2 = melody2.append(new Fragment("0000555555551153111153535311531155111111111111111111111111111111"));
+        
+        bass1 = bass1.append(new Fragment("65111111111111111165111165116511")).append(new Fragment("65111111111111111165111165116511").shift(-2)).append(new Fragment("65111111111111111165111165116511"));
+        bass2 = bass2.append(new Fragment("60111160111160111160111160116011")).append(new Fragment("60111160111160111160111160116011").shift(-2)).append(new Fragment("60111160111160111160111160116011"));
+        bass3 = bass3.append(new Fragment("53115311115311115311115311531153")).append(new Fragment("53115311115311115311115311531153").shift(-2)).append(new Fragment("53115311115311115311115311531153"));
+        
+        //bass1 = bass1.append(new Fragment("65").expand(16));
+        //bass2 = bass2.append(new Fragment("60").expand(16));
+        //bass3 = bass3.append(new Fragment("53").expand(16));
+        bass1 = bass1.append(new Fragment("6311").expand(2).loop(5));
+        bass2 = bass2.append(new Fragment("5811").expand(2).loop(5));
+        bass3 = bass3.append(new Fragment("1151").expand(2).loop(5));
+        bass1 = bass1.append(new Fragment("6311").expand(1).loop(2));
+        bass2 = bass2.append(new Fragment("5811").expand(1).loop(2));
+        bass3 = bass3.append(new Fragment("1151").expand(1).loop(2));
+        bass1 = bass1.append(new Fragment("63").expand(1).loop(5));
+        bass2 = bass2.append(new Fragment("58").expand(1).loop(5));
+        bass3 = bass3.append(new Fragment("51").expand(1).loop(5));
+        bass1 = bass1.append(new Fragment("00").expand(1).loop(3));
+        bass2 = bass2.append(new Fragment("00").expand(1).loop(3));
+        bass3 = bass3.append(new Fragment("00").expand(1).loop(3));
+        
+        melody1 = melody1.append(new Fragment("0000606011651165116011601167116711116765676711656769117011691169"));
+        melody2 = melody2.append(new Fragment("0000000011601160116011601160116011110000000000000060116011601160"));
+        
+        melody1 = melody1.append(new Fragment("000060601165116511601160116711671111111111111111111111111111656711691170111111117070707070676970"));
+        melody2 = melody2.append(new Fragment("000000001160116011601160116011601111111111111111111111111111585811581163111111116363636363000000"));
+        
+        bass1 = bass1.append(new Fragment("58535551").expand(8).loop(3));
+        bass2 = bass2.append(new Fragment("62575855").expand(8).loop(3));
+        bass3 = bass3.append(new Fragment("65606258").expand(8).loop(3));
+        
+        melody1 = melody1.append(new Fragment("1111111111656572111111111111706967676711676911701172701111676970"));
+        melody1 = melody1.append(new Fragment("1111111111657472111111111170727411741175117472707270111111111111"));
+        melody2 = melody2.append(new Fragment("0000").loop(32));
+        //melody2 = melody2.append(new Fragment("000000001160116011601160116011601111111111111111111111111111585811581163111111116363636363000000"));
+        
+        bells1 = bells1.append(new Fragment("00").expand(33)).append(new Fragment("00"));
+        bells2 = bells2.append(new Fragment("00").expand(33)).append(new Fragment("00"));
+        bells3 = bells3.append(new Fragment("00").expand(33)).append(new Fragment("00"));
+        
+        bells3 = bells3.append(new Fragment("8277").loop(4));
+        bells2 = bells2.append(new Fragment("8600").loop(4));
+        bells3 = bells3.append(new Fragment("8177").loop(4));
+        bells2 = bells2.append(new Fragment("8400").loop(4));
+        bells3 = bells3.append(new Fragment("8279").loop(4));
+        bells2 = bells2.append(new Fragment("8600").loop(4));
+        bells3 = bells3.append(new Fragment("8279").loop(4));
+        bells2 = bells2.append(new Fragment("8700").loop(4));
+        
+        bells3 = bells3.append(new Fragment("8277").loop(4));
+        bells2 = bells2.append(new Fragment("8600").loop(4));
+        bells3 = bells3.append(new Fragment("8177").loop(4));
+        bells2 = bells2.append(new Fragment("8400").loop(4));
+        bells3 = bells3.append(new Fragment("8279").loop(4));
+        bells2 = bells2.append(new Fragment("8600").loop(4));
+        bells3 = bells3.append(new Fragment("8279").loop(4));
+        bells2 = bells2.append(new Fragment("8700").loop(4));
+        
+        bass1 = bass1.append(new Fragment("50480000").expand(8));
+        bass2 = bass2.append(new Fragment("53430000").expand(8));
+        bass3 = bass3.append(new Fragment("57550000").expand(8));
         
         
+        melody1 = melody1.append(new Fragment("771111741111721111111111701170117711117411117011111111111111707069111165111165111111111111111111747500757475747575747011111111"));
+        melody2 = melody2.append(new Fragment("65111165111165111111111165116511651111651111651111111111"));
         
-        
-        
-        
-        
+        Thought whole = new Thought();
+        whole.add(bass1);
+        whole.add(bass2);
+        whole.add(bass3);
+        whole.add(bells1);
+        whole.add(bells2);
+        whole.add(bells3);
+        whole.add(melody1);
+        whole.add(melody2);
+        whole.bpm = 260;
+        return whole;
+    }
+    private static Thought insideOut()
+    {
         //Inside Out Song / Fragment + Thought method testing
-        Fragment bgr1 = new Fragment("5059505950595059505950595059505950595059505950595059505950595059");
+        Fragment bgr1 = new Fragment("50595059505950595059505950595059");
         Fragment bgr2 = new Fragment("4857485748574857485748574857485748574857485748574857485748574857");
         Fragment mel1 = new Fragment("7111117111116967697111671111696766711167111169676671116772716967");
         Fragment mel2 = new Fragment("6511116911116765676911651111676564691165111167656469116572716965");
         Fragment rest = new Fragment("00000000000000000000000000000000");
-        Fragment intr = new Fragment("62666771111100000000000000000000");
+        Fragment intr = new Fragment("62666771111111111100000000000000");
         
-         Fragment background = bgr1.append(bgr1.append(bgr2).loop(2));
-         background.partialVolume = .6;
-         Fragment melody = rest.loop(2).append(mel1.append(mel2).loop(2));
-         melody.partialVolume = .8;
-         Fragment interludes = rest.loop(6).append(intr.loop(2).append(intr.shift(-2).loop(2)));
-         interludes.partialVolume = .8;
+        Fragment background = bgr1.append(bgr1.loop(2).append(bgr2).loop(2));
+        background.partialVolume = .6;
+        Fragment melody = rest.append(mel1.append(mel2).loop(2));
+        melody.partialVolume = .8;
+        Fragment interludes = rest.loop(5).append(intr.loop(2).append(intr.shift(-2).loop(2)));
+        interludes.partialVolume = .8;
         
-         background.color = 5;
-         melody.color = 1;
-         interludes.color = 3;
+        background.color = 5;
+        melody.color = 1;
+        interludes.color = 3;
+        
+        Piano.octave = -1;
          
         Thought iso = new Thought();
         iso.add(background);
         iso.add(melody);
         iso.add(interludes);
         iso.bpm = 300;
-        //playThought(iso);
-        
+        return iso;
+    }
+    private static Thought blueWarmup()
+    {
         Piano.octave = -2;
         
         Fragment bass1 = new Fragment("00581111621111651111621111631111671111701111671111").shift(-24);
@@ -172,149 +306,46 @@ public class Screen
         t.add(allBass);
         t.add(allMel);
         t.add(chords);
-        //t.add(chordRoots1.dominantSeventh().append(chordRoots2.dominantSeventh()));
         t.bpm = 600;
-        playThought(t);
-        
-        //for(int i = 0; i < chords1.length; i++)
-        //{
-        //    playFragment(chords1[i].append(chords2[i]).append(chords3[i]).append(chords4[i]));
-        //}
-        
-        //playFragment();
-        //Fragment m = tm1.append(tm2).append(tm3).append(tm2).append(tm4).append(tm2);
-        //playFragment(m);
-        
-        
-        //Thought melody = new Thought();
-        //melody.append(mel1);
-        //melody.append(mel2);
-        //melody.append(mel1);
-        //melody.append(mel2);
-        //melody.bpm = 220;
-        
-        //Thought background = new Thought();
-        //background.append(bgr1);
-        //background.append(bgr2);
-        //background.append(bgr1);
-        //background.append(bgr2);
-        //background.bpm = 220;
-        
-        //Thought interludes = new Thought();
-        //interludes.append(ntn1.loop(2));
-        //interludes.append(intr.loop(2));
-        //interludes.append(intr.shift(-2).loop(2));
-        //interludes.bpm = 220;
-        
-        //playThought(background);
-        //playThought(melody);
-        //playThought(interludes);
+        return t;
     }
     private static void playThought(Thought t)
     {
+        Piano.thoughtToDraw = t;
         final Thought thought = t;
         Thread t1 = new Thread()
         {
             public void run()
             {
+                int counter = 0;
                 while(thought.hasMore())
                 {
+                    thought.currentBeatPercentage = 0;
                     thought.tick();
-                    System.out.println();
-                    pause((int)(60.0 / thought.getBPM() * 1000.0));
+                    //System.out.println("\f" + thought.stringFromBeat(thought.itr));
+                    int toRest = (int)(60.0 / thought.getBPM() * 1000.0);
+                    while(toRest > 0)
+                    {
+                        if(toRest <= 25)
+                        {
+                            thought.currentBeatPercentage = 1;//toRest * 1.0 / (int)(60.0 / thought.getBPM() * 1000.0);
+                            frame.repaint();
+                            pause(toRest);
+                            toRest = 0;
+                        }
+                        else
+                        {
+                            thought.currentBeatPercentage = 1 - (toRest * 1.0 / (int)(60.0 / thought.getBPM() * 1000.0));
+                            frame.repaint();
+                            pause(25);
+                            toRest -= 25;
+                        }
+                    }
                 }
             }
         };
         t1.start();
     }
-//     private static void playFragment(Fragment f)
-//     {
-//         final Fragment frag = f;
-//         Thread t1 = new Thread()
-//         {
-//             public void run()
-//             {
-//                 if(!frag.hasNextNote())
-//                     return;
-//                 int prevNote = 01;
-//                 while(frag.hasNextNote())
-//                 {
-//                     int toPlay = frag.nextNote();
-//                     if(toPlay != Fragment.REST && toPlay != Fragment.HOLD)
-//                     {
-//                         Screen.playNote(toPlay);
-//                         prevNote = toPlay;
-//                         try{sleep((int)(60.0 / metronome * 1000.0));}catch(Exception e){}
-//                         if(!(frag.hasNextNote() && frag.peek() == Fragment.HOLD))
-//                             Screen.endNote(toPlay);
-//                     }
-//                     else
-//                     {
-//                         if(toPlay == Fragment.REST)
-//                         {
-//                             Screen.endNote(prevNote);
-//                             try{sleep((int)(60.0 / metronome * 1000.0));}catch(Exception e){}
-//                         }
-//                         else
-//                         {
-//                             try{sleep((int)(60.0 / metronome * 1000.0));}catch(Exception e){}
-//                             if(!frag.hasNextNote())
-//                                 Screen.endNote(prevNote);
-//                             else if(frag.peek() != Fragment.HOLD)
-//                             {
-//                                 Screen.endNote(prevNote);
-//                             }
-//                         }
-//                     }
-//                 }
-//             }
-//         };
-//         t1.start();
-//     }
-//     private static void playThought(Thought f)
-//     {
-//         final Thought frag = f;
-//         Thread t1 = new Thread()
-//         {
-//             public void run()
-//             {
-//                 if(!frag.hasNextNote())
-//                     return;
-//                 int prevNote = 01;
-//                 while(frag.hasNextNote())
-//                 {
-//                     int toPlay = frag.nextNote();
-//                     if(toPlay != Fragment.REST && toPlay != Fragment.HOLD)
-//                     {
-//                         Screen.playNote(toPlay);
-//                         prevNote = toPlay;
-//                         try{sleep((int)(60.0 / frag.getBPM() * 1000.0));}catch(Exception e){}
-//                         if(!(frag.hasNextNote() && frag.peek() == Fragment.HOLD))
-//                             Screen.endNote(toPlay);
-//                     }
-//                     else
-//                     {
-//                         if(toPlay == Fragment.REST)
-//                         {
-//                             Screen.endNote(prevNote);
-//                             try{sleep((int)(60.0 / frag.getBPM() * 1000.0));}catch(Exception e){}
-//                         }
-//                         else
-//                         {
-//                             try{sleep((int)(60.0 / frag.getBPM() * 1000.0));}catch(Exception e){}
-//                             if(!frag.hasNextNote())
-//                                 Screen.endNote(prevNote);
-//                             else if(frag.peek() != Fragment.HOLD)
-//                             {
-//                                 Screen.endNote(prevNote);
-//                             }
-//                         }
-//                     }
-//                 }
-//             }
-//         };
-//         t1.start();
-//     }
     private static void pause(long time)
     {
         try{Thread.sleep(time);}catch(Exception e){}
@@ -340,7 +371,7 @@ public class Screen
     {
         //if(notes[note])
         //    return note;
-        System.out.println("Turning On: " +note);
+        //System.out.println("Turning On: " +note);
         notes[note] = color;
         piano.noteOn(note, (int)(volume * Piano.MAX_VOLUME));
         frame.repaint();
@@ -353,7 +384,7 @@ public class Screen
     {
         if(notes[note] == 0)
             return;
-        System.out.println("Turning Off: " +note);
+        //System.out.println("Turning Off: " +note);
         notes[note] = 0;
         piano.noteOff(note);
         frame.repaint();
