@@ -5,65 +5,90 @@
  * @author (your name) 
  * @version (a version number or a date)
  */
+import java.util.ArrayList;
 public class Fragment
 {
-    public int[] notes;
+    public ArrayList<Note> notes;
+    //public int[] notes;
+    //public int[] volumes;
     private String string;
     public int itr;
     public static final int REST = 00;
     public static final int HOLD = 11;
-    
-    public double partialVolume;
     public int color;
     public Fragment(String str)
     {
         char[] arr = str.toCharArray();
-        notes = new int[arr.length / 2];
+        notes = new ArrayList<Note>(arr.length / 2);
+        Note oldNote = null;
         for(int i = 0; i < arr.length; i+= 2)
         {
-            notes[i/2] = (arr[i]-'0')*10 + (arr[i+1]-'0');
+            Note n = new Note();
+            int value = (arr[i]-'0')*10 + (arr[i+1]-'0');
+            if(value == Note.REST)
+            {
+                if(oldNote != null && oldNote.isRest())
+                {
+                    oldNote.length += Note.BASE;
+                }
+                else
+                {
+                    n.note = Note.REST;
+                    oldNote = n;
+                    notes.add(n);
+                }
+            }
+            else if(value == Note.HOLD)
+            {
+                if(oldNote != null)
+                    oldNote.length += Note.BASE;
+            }
+            else
+            {
+                n.note = value;
+                oldNote = n;
+                notes.add(n);
+            }
         }
         itr = 0;
-        partialVolume = 1;
         color = 1;
+        applyColor(color);
     }
     public Fragment append(Fragment m)
     {
-        String newString = getFullString() + m.getFullString();
-        Fragment out = new Fragment(newString);
-        out.color = color;
-        out.partialVolume = partialVolume;
-        return out;
+        for(Note n : m.notes)
+        {
+            notes.add(n.copy());
+        }
+        return this.applyColor(color);
     }
     public Fragment loop(int n)
     {
-        String out = getFullString();
-        String output = "";
-        for(int i = 0; i < n; i++)
-            output += out;
-        Fragment outF = new Fragment(output);
-        outF.color = color;
-        outF.partialVolume = partialVolume;
-        return outF;
+        int len = notes.size();
+        for(int k = 1; k < n; k++)
+        {
+            for(int i = 0; i < len; i++)
+            {
+                notes.add(notes.get(i).copy());
+            }
+        }
+        return this;
     }
     public Fragment shift(int scale)
     {
-        Fragment m = copy();
-        for(int i = 0; i < m.notes.length; i++)
+        for(Note n : notes)
         {
-            if(m.notes[i] != Fragment.REST && m.notes[i] != Fragment.HOLD)
-                m.notes[i] = m.notes[i] + scale;
+            if(!n.isRest())
+                n.note += scale;
         }
-        return m;
+        return this;
     }
     public String getFullString()
     {
         String output = "";
-        for(int i : notes)
+        for(Note i : notes)
         {
-            if(i < 10)
-                output += "0";
-            output += i;
+            output += i.toString();
         }
         return output;
     }
@@ -77,104 +102,153 @@ public class Fragment
     }
     public Fragment expand(int factor)
     {
-        String output = "";
-        for(int i = 0; i < notes.length; i++)
+        for(Note n : notes)
         {
-            for(int j = 0; j < factor; j++)
-            {
-                if(j != 0)
-                {
-                    if(notes[i] != REST)
-                    {
-                        output += formatNote(HOLD);
-                    }
-                }
-                else
-                    output += formatNote(notes[i]);
-            }
+            n.length *= factor;
         }
-        Fragment outF = new Fragment(output);
-        outF.color = color;
-        outF.partialVolume = partialVolume;
-        return outF;
+        return this;
     }
-    private String formatNote(int note)
+    public Fragment applyColor(int c)
     {
-        return (note < 10 ? "0"+note:""+note);
+        color = c;
+        for(Note n : notes)
+        {
+            n.color = color;
+        }
+        return this;
     }
-    public Thought dominantSeventh()
+    public Note[] getNextNotes()
     {
-        Thought out = new Thought();
-        out.add(copy());
-        out.add(copy().shift(4));
-        out.add(copy().shift(7));
-        out.add(copy().shift(10));
+        Note[] out = new Note[10];
+        for(int z = itr; z < notes.size() && z < itr + 9; z++)
+        {
+            out[z-itr+1] = notes.get(z);
+        }
+        if(itr > 0)
+            out[0] = notes.get(itr - 1);
         return out;
     }
-    public Thought minorSeventh()
+    public Fragment setSubdivision(int amt)
     {
-        Thought out = new Thought();
-        out.add(copy());
-        out.add(copy().shift(3));
-        out.add(copy().shift(7));
-        out.add(copy().shift(10));
-        return out;
+        for(Note n : notes)
+        {
+            n.length = amt * n.length / Note.BASE;
+        }
+        return this;
     }
-    public Thought powerChord()
+    
+//     public Thought dominantSeventh()
+//     {
+//         Thought out = new Thought();
+//         out.add(copy());
+//         out.add(copy().shift(4));
+//         out.add(copy().shift(7));
+//         out.add(copy().shift(10));
+//         return out;
+//     }
+//     public Thought minorSeventh()
+//     {
+//         Thought out = new Thought();
+//         out.add(copy());
+//         out.add(copy().shift(3));
+//         out.add(copy().shift(7));
+//         out.add(copy().shift(10));
+//         return out;
+//     }
+//     public Thought powerChord()
+//     {
+//         Thought out = new Thought();
+//         out.add(copy());
+//         out.add(copy().shift(7));
+//         return out;
+//     }
+//     public Thought superPowerChord()
+//     {
+//         Thought out = new Thought();
+//         out.add(copy());
+//         out.add(copy().shift(7));
+//         out.add(copy().shift(12));
+//         return out;
+//     }
+    public Fragment setVolume(int v)
     {
-        Thought out = new Thought();
-        out.add(copy());
-        out.add(copy().shift(7));
-        return out;
-    }
-    public Thought superPowerChord()
-    {
-        Thought out = new Thought();
-        out.add(copy());
-        out.add(copy().shift(7));
-        out.add(copy().shift(12));
-        return out;
+        for(Note n : notes)
+            n.volume = v;
+        return this;
     }
     public int length()
     {
-        return notes.length;
+        int output = 0;
+        for(Note n : notes)
+        {
+            output += n.length;
+        }
+        return output / Note.BASE;
     }
-    public Fragment copy()
+    public Note getNextNote()
     {
-        return loop(1);
+        return notes.get(itr++);
     }
-    public int nextNote()
+    public boolean hasMore()
     {
-        return notes[itr++];
+        return itr < notes.size();
     }
-    public int peek()
-    {
-        return notes[itr];
-    }
-    public boolean hasNextNote()
-    {
-        return itr < notes.length;
-    }
+    //public Fragment copy()
+    //{
+    //    return loop(1);
+    //}
+    //public int nextNote()
+    //{
+    //    return notes[itr++];
+    //}
+    //public int peek()
+    //{
+    //    return notes[itr];
+    //}
+    //public boolean hasMore()
+    //{
+    //    return itr < notes.size();
+    //}
     public void restart()
     {
         itr = 0;
     }
+//     public String fullInfoString()
+//     {
+//         String out = "[";
+//         for(int n : notes)
+//             out += formatNote(n) + " ";
+//         out += "\n ";
+//         for(int n : volumes)
+//             out += formatNote(n) + " ";
+//         out += "]";
+//         return out;
+//     }
+//     public String toString()
+//     {
+//         String output = "";
+//         for(int i : notes)
+//         {
+//             if(i == REST)
+//                 output += "  ";
+//             else if(i == HOLD)
+//                 output += "--";
+//             else
+//             {
+//                 if(i < 10)
+//                     output += "0";
+//                 output += i;
+//             }
+//         }
+//         return output;
+//     }
     public String toString()
     {
-        String output = "";
-        for(int i : notes)
+        String out = "";
+        for(Note n : notes)
         {
-            if(i == REST)
-                output += "  ";
-            else if(i == HOLD)
-                output += "--";
-            else
-            {
-                if(i < 10)
-                    output += "0";
-                output += i;
-            }
+            out += n + " " ;
         }
-        return output;
+        return out;
     }
 }

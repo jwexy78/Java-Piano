@@ -11,7 +11,7 @@ public class Thought
     }
     public void add(Fragment frag)
     {
-        audioPlayers.add(new AudioPlayer(frag.copy()));
+        audioPlayers.add(new AudioPlayer(frag));
     }
     public void add(Thought thought)
     {
@@ -27,7 +27,7 @@ public class Thought
         {
             Fragment f = new Fragment(bls + p.fragment.getFullString());
             f.color = p.fragment.color;
-            f.partialVolume = p.fragment.partialVolume;
+            //f.partialVolume = p.fragment.partialVolume;
             audioPlayers.add(new AudioPlayer(f));
         }
     }
@@ -55,12 +55,7 @@ public class Thought
         for(AudioPlayer p : audioPlayers)
         {
             if(p.running)
-                p.turnOffs();
-        }
-        for(AudioPlayer p : audioPlayers)
-        {
-            if(p.running)
-                p.turnOns();
+                p.tick();
         }
     }
     public void setColor(int color)
@@ -83,30 +78,30 @@ public class Thought
     {
         return bpm;
     }
-    public int[][] shortChannels()
-    {
-        int[][] output = new int[audioPlayers.size()][10];
-        for(int i = 0; i < audioPlayers.size(); i++)
-        {
-            for(int j = 0; j < Math.min(audioPlayers.get(i).fragment.length() - itr, 10); j++)
-            {
-                if(itr != 0)
-                    output[i][j] = audioPlayers.get(i).fragment.notes[itr+j-1];
-            }
-            if(output[i][0] == Fragment.HOLD)
-            {
-                for(int k = itr-1; k > -1; k--)
-                {
-                    if(audioPlayers.get(i).fragment.notes[k] != Fragment.HOLD)
-                    {
-                        output[i][0] = audioPlayers.get(i).fragment.notes[k];
-                        break;
-                    }
-                }
-            }
-        }
-        return output;
-    }
+//     public int[][] shortChannels()
+//     {
+//         int[][] output = new int[audioPlayers.size()][10];
+//         for(int i = 0; i < audioPlayers.size(); i++)
+//         {
+//             for(int j = 0; j < Math.min(audioPlayers.get(i).fragment.length() - itr, 10); j++)
+//             {
+//                 if(itr != 0)
+//                     output[i][j] = audioPlayers.get(i).fragment.notes[itr+j-1];
+//             }
+//             if(output[i][0] == Fragment.HOLD)
+//             {
+//                 for(int k = itr-1; k > -1; k--)
+//                 {
+//                     if(audioPlayers.get(i).fragment.notes[k] != Fragment.HOLD)
+//                     {
+//                         output[i][0] = audioPlayers.get(i).fragment.notes[k];
+//                         break;
+//                     }
+//                 }
+//             }
+//         }
+//         return output;
+//     }
     public String toString()
     {
         String output = "{\n";

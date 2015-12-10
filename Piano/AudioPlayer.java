@@ -9,54 +9,78 @@ public class AudioPlayer
 {
     public Fragment fragment;
     public boolean running;
-    int previousNote;
+    Note currentNote;
     public AudioPlayer(Fragment frag)
     {
-        previousNote = -1;
         fragment = frag;
         running = true;
     }
-    public void turnOffs()
+    
+    public void tick()
     {
-        if(!fragment.hasNextNote())
+        //If the current note is still playing
+        if(currentNote != null && currentNote.hasMore())
         {
-            if(previousNote != -1)
-                Screen.endNote(previousNote);
-            running = false;
+            currentNote.tick();
             return;
         }
-        int toPlay = fragment.peek();
-        
-        if(previousNote != -1)
+        //If we had a previous note
+        if(currentNote != null)
         {
-            if(toPlay != Fragment.HOLD)
-            {
-                if(fragment.notes[fragment.itr-1] != Fragment.REST)
-                    Screen.endNote(previousNote);
-            }
+            Screen.removeNote(currentNote);
+        }
+        if(fragment.hasMore())
+        {
+            currentNote = fragment.getNextNote();
+            Screen.addNote(currentNote);
+        }
+        else
+        {
+            running = false;
         }
     }
-    public void turnOns()
-    {
-        int toPlay = fragment.nextNote();
-        
-        if(previousNote != -1)
-        {
-            if(toPlay != Fragment.HOLD)
-            {
-                if(toPlay != Fragment.REST)
-                {
-                    //If toPlay is an actual note
-                    Screen.playNote(toPlay, fragment.partialVolume, fragment.color);
-                    previousNote = toPlay;
-                }
-            }
-        }
-        else if(toPlay != Fragment.HOLD && toPlay != Fragment.REST)
-        {
-            //If toPlay is an actual note
-            Screen.playNote(toPlay, fragment.partialVolume, fragment.color);
-            previousNote = toPlay;
-        }
-    }
+//     
+//     public void turnOffs()
+//     {
+//         if(!fragment.hasNextNote())
+//         {
+//             if(previousNote != -1)
+//                 Screen.endNote(previousNote);
+//             running = false;
+//             return;
+//         }
+//         int toPlay = fragment.peek();
+//         
+//         if(previousNote != -1)
+//         {
+//             if(toPlay != Fragment.HOLD)
+//             {
+//                 if(fragment.notes[fragment.itr-1] != Fragment.REST)
+//                     Screen.endNote(previousNote);
+//             }
+//         }
+//     }
+//     public void turnOns()
+//     {
+//         int toPlay = fragment.nextNote();
+//         
+//         if(previousNote != -1)
+//         {
+//             if(toPlay != Fragment.HOLD)
+//             {
+//                 if(toPlay != Fragment.REST)
+//                 {
+//                     //If toPlay is an actual note
+//                     Screen.playNote(toPlay, fragment.volumes[fragment.itr - 1] / 100.0, fragment.color);
+//                     previousNote = toPlay;
+//                 }
+//             }
+//         }
+//         else if(toPlay != Fragment.HOLD && toPlay != Fragment.REST)
+//         {
+//             //If toPlay is an actual note
+//             Screen.playNote(toPlay, fragment.volumes[fragment.itr - 1] / 100.0, fragment.color);
+//             previousNote = toPlay;
+//         }
+//     }
 }

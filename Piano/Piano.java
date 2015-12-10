@@ -18,7 +18,7 @@ public class Piano extends JComponent
     public static final int KEY_HEIGHT = 200;
     public static final int BLACK_KEY_WIDTH = 20;
     public static final int BLACK_KEY_HEIGHT = 100;
-    public static final int BLOCK_HEIGHT = 50;
+    public static final int BLOCK_HEIGHT = 5;
     public static final int ROUNDING = 20;
     public static final int MAX_VOLUME = 80;
     public static final String keyboard = "asdfghjkl;\"";
@@ -70,37 +70,31 @@ public class Piano extends JComponent
         
         if(thoughtToDraw != null)
         {
-            int[][] arr = thoughtToDraw.shortChannels();
-            for(int j = 0; j < arr.length; j++)
+            for(AudioPlayer p : thoughtToDraw.audioPlayers)
             {
-                for(int i = 0; i < 10; i++)
+                Note[] arr = p.fragment.getNextNotes();
+                int counter = 0;
+                for(Note n : arr)
                 {
-                    if(arr[j][i] != Fragment.REST && arr[j][i] != Fragment.HOLD)
+                    if(n != null)
                     {
-                        //g.setColor(colors[1]);
-                        g.setColor(colors[ (thoughtToDraw.audioPlayers.get(j).fragment.color)-1]);
-                        int note = arr[j][i];
-                        
-                        int height = 1;
-                        for(int a = i+1; a < 10; a++)
+                        counter += n.remainingLength();
+                        if(!n.isRest())
                         {
-                            if(arr[j][a] == Fragment.HOLD)
-                                height++;
+                            g.setColor(colors[n.color - 1]);
+                            if(noteIsBlack(n.note))
+                            {
+                                g.fillRoundRect(xFromNote(n.note) - BLACK_KEY_WIDTH/2,(int)(TOP_HEIGHT - (counter) * BLOCK_HEIGHT),BLACK_KEY_WIDTH,n.remainingLength() * BLOCK_HEIGHT,ROUNDING,ROUNDING);
+                            }
                             else
-                                break;
-                        }
-                        
-                        if(noteIsBlack(note))
-                        {
-                            g.fillRoundRect(xFromNote(arr[j][i]) - BLACK_KEY_WIDTH/2,(int)(TOP_HEIGHT - (i + height - thoughtToDraw.currentBeatPercentage) * BLOCK_HEIGHT),BLACK_KEY_WIDTH,height * BLOCK_HEIGHT,ROUNDING,ROUNDING);
-                        }
-                        else
-                        {
-                            g.fillRoundRect(xFromNote(arr[j][i]) - KEY_WIDTH/2,(int)(TOP_HEIGHT - (i + height - thoughtToDraw.currentBeatPercentage) * BLOCK_HEIGHT),KEY_WIDTH,height * BLOCK_HEIGHT,ROUNDING,ROUNDING);
+                            {
+                                g.fillRoundRect(xFromNote(n.note) - KEY_WIDTH/2,(int)(TOP_HEIGHT - (counter) * BLOCK_HEIGHT),KEY_WIDTH,n.remainingLength() * BLOCK_HEIGHT,ROUNDING,ROUNDING);
+                            }
                         }
                     }
                 }
             }
+            
         }
         
         g.setColor(Color.WHITE);
