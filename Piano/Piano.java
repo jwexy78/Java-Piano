@@ -14,22 +14,23 @@ import java.awt.event.*;
 public class Piano extends JComponent
 {
     public static final int TOP_HEIGHT = 300;
-    public static final int KEY_WIDTH = 35;
+    public static final int KEY_WIDTH = 25;
     public static final int KEY_HEIGHT = 200;
-    public static final int BLACK_KEY_WIDTH = 20;
+    public static final int BLACK_KEY_WIDTH = 15;
     public static final int BLACK_KEY_HEIGHT = 100;
     public static final int BLOCK_HEIGHT = 5;
     public static final int ROUNDING = 20;
-    public static final int MAX_VOLUME = 80;
+    public static final int MAX_VOLUME = 127;
     public static final String keyboard = "asdfghjkl;\"";
     public static final String fullKeyboard = "awsedftgyhujkolp;\"]E";
     public static Thought thoughtToDraw;
     private static int[] graphicsForNote;
     public static int octave;
+    public static int KEYS_TO_DRAW = 33;
     private static final Color[] colors = new Color[] {Color.YELLOW,Color.GREEN,Color.BLUE,Color.ORANGE, Color.MAGENTA};
     public Piano()
     {
-        this.setPreferredSize(new Dimension(KEY_WIDTH * 30,KEY_HEIGHT + TOP_HEIGHT));
+        this.setPreferredSize(new Dimension(KEY_WIDTH * KEYS_TO_DRAW,KEY_HEIGHT + TOP_HEIGHT));
         graphicsForNote = new int[150];
     }
     /**
@@ -66,7 +67,7 @@ public class Piano extends JComponent
         Graphics2D g = (Graphics2D) gf;
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g.setColor(Color.BLACK);
-        g.fillRect(0,0,KEY_WIDTH * 30, TOP_HEIGHT);
+        g.fillRect(0,0,KEY_WIDTH * KEYS_TO_DRAW, TOP_HEIGHT);
         
         if(thoughtToDraw != null)
         {
@@ -98,9 +99,9 @@ public class Piano extends JComponent
         }
         
         g.setColor(Color.WHITE);
-        g.fillRect(0,TOP_HEIGHT,30 * KEY_WIDTH, KEY_HEIGHT);
+        g.fillRect(0,TOP_HEIGHT,KEYS_TO_DRAW * KEY_WIDTH, KEY_HEIGHT);
         g.setColor(Color.BLACK);
-        for(int i = 0; i < 30; i++)
+        for(int i = 0; i < KEYS_TO_DRAW; i++)
         {
             g.drawRect(i * KEY_WIDTH,TOP_HEIGHT,KEY_WIDTH,KEY_HEIGHT);
         }
@@ -120,7 +121,7 @@ public class Piano extends JComponent
         
         g.setColor(Color.BLACK);
         
-        for(int j = -7; j < 36; j += 7)
+        for(int j = -7; j < KEYS_TO_DRAW; j += 7)
         {
             
             for(int i = j - 1; i < j + 2; i++)

@@ -56,11 +56,15 @@ public class Fragment
     }
     public Fragment append(Fragment m)
     {
-        for(Note n : m.notes)
+        for(int i = 0 ; i < m.notes.size(); i++)//Note n : m.notes)
         {
-            notes.add(n.copy());
+            notes.add(m.notes.get(i).copy());
         }
         return this.applyColor(color);
+    }
+    public Fragment copy()
+    {
+        return new Fragment("").append(this);
     }
     public Fragment loop(int n)
     {

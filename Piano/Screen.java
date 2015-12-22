@@ -1,6 +1,4 @@
-import javax.sound.midi.MidiSystem;
-import javax.sound.midi.Synthesizer;
-import javax.sound.midi.MidiChannel;
+import javax.sound.midi.*;
 
 import javax.swing.JFrame;
 import java.awt.event.*;
@@ -24,7 +22,14 @@ public class Screen
         {
             Synthesizer synth = MidiSystem.getSynthesizer();
             synth.open();
+            Instrument[] instruments = synth.getAvailableInstruments();
+            for(Instrument m : instruments)
+            {
+                synth.loadInstrument(m);
+                System.out.println(m);
+            }
             MidiChannel[] channels = synth.getChannels();
+            channels[0].programChange(52);
             piano = channels[0];
         }
         catch (Exception e) 
@@ -106,12 +111,18 @@ public class Screen
         //playThought(letItGo());
         
         Thought test = new Thought();
-        Fragment frag = new Fragment("48554855");
+        Fragment frag =  new Fragment("6011606264646464").append(new Fragment("65646511641111").setSubdivision(Note.EIGHT));
+        Fragment frag1 = new Fragment("48111111111111115311521111");
         test.add(frag);
-        Fragment frag2 = new Fragment("60656772").loop(4).setSubdivision(Note.SIXTEENTH);
-        test.add(frag2);
-        test.bpm = 60;
-        playThought(letItGo());
+        test.add(frag1);
+        test.bpm = 120;
+        Piano.octave = -1;
+        
+        
+        
+        
+        
+        playThought(charlieBrown());
         
         //test.setVolume(90);
         //System.out.println(test.fullInfoString());
@@ -126,80 +137,341 @@ public class Screen
         //playThought(bwu);
         
     }
-//     private static Thought randomSolo()
-//     {
-//         String[] notes = new String[] {"60","62","63","67","72"};
-//         String[] rythms = new String[] {"n-nn-nn-n000","00n--n--0000","nnnnnnnnnnnn","n-n-n-n-n-n-",};
-//         Fragment f = new Fragment("");
-//         for(int i = 0; i < 200; i++)
-//         {
-//             String rythm = rythms[(int)(Math.random() * rythms.length)];
-//             String out = "";
-//             for(char c : rythm.toCharArray())
-//             {
-//                 if(c == '0')
-//                     out += "00";
-//                 else if(c == '-')
-//                     out += "11";
-//                 else if(c == 'n')
-//                     out += notes[(int)(Math.random() * notes.length)];
-//                     
-//                 //for(int j = 0; Math.random() < .5; j++)
-//                 //{
-//                 //    out += "00";
-//                 //}
-//             }
-//             f.append(new Fragment(out));
-//         }
-//         f.setVolume(80);
-//         
-//         Fragment m = new Fragment("");
-//         m.append(new Fragment("481111111148000000000000").loop(2));
-//         m.append(new Fragment("531111111153000000000000").loop(2));
-//         m.append(new Fragment("481111111148000000000000").loop(2));
-//         m.append(new Fragment("531111111153000000000000").loop(2));
-//         
-//         m.append(new Fragment("551111111155000000000000"));
-//         m.append(new Fragment("531111111153000000000000"));
-//         m.append(new Fragment("481111111148000000000000").loop(2));
-//         
-//         
-//         Fragment n = new Fragment("");
-//         n.append(new Fragment("551111111157000000000000").loop(2));
-//         n.append(new Fragment("601111111162000000000000").loop(2));
-//         n.append(new Fragment("551111111157000000000000").loop(2));
-//         n.append(new Fragment("601111111162000000000000").loop(2));
-//         n.append(new Fragment("621111111164000000000000"));
-//         n.append(new Fragment("601111111162000000000000"));
-//         n.append(new Fragment("551111111157000000000000").loop(2));
-//         
-//         
-//         m = m.loop(10);
-//         n = n.loop(10);
-//         
-//         m.color = 2;
-//         n.color = 2;
-//         
-//         Thought out = new Thought();
-//         out.add(f);
-//         out.add(m);
-//         out.add(n);
-//         out.bpm = 400;
-//         return out;
-//     }
-//     private static Thought snowman()
-//     {
-//         Fragment bells = new Fragment("");
-//         Fragment new Fragment("");
-//         bells.append(new Fragment("7479847679847784").loop(4).append(new Fragment("88111111111111110000000000000000")));
-//         bass1.append(new Fragment("6511116011117211").loop(4).append(new Fragment("72111111111111110000000000000000")));
-//         bass1.color = 5;
-//         Thought whole = new Thought();
-//         whole.add(bells);
-//         whole.add(bass1);
-//         whole.bpm = 400;
-//         return whole;
-//     }
+    
+    private static Thought ch()
+    {
+        Fragment b1 = new Fragment("000000000000000000");
+        Fragment b2 = new Fragment("000000000000000000");
+        Fragment b3 = new Fragment("000000000000000000");
+        
+        Fragment m = new Fragment("606011621160116411");
+        
+         m.append(new Fragment("0000000067116411111111116711641111116211111111626011621160626411"));
+        b1.append(new Fragment("4811111111111111481111111111111141111111111111111111111111111111"));
+        b2.append(new Fragment("5211111111111111521111111111111145111111111111111111111111111111"));
+        b3.append(new Fragment("5511111111111111551111111111111148111111111111111111111111111111"));
+        
+         m.append(new Fragment("00620062671164111111111167116411111162111111116260116211601160"));
+        b1.append(new Fragment("4811111111111111481111111111111141111111111111111111111111111111"));
+        b2.append(new Fragment("5211111111111111521111111111111145111111111111111111111111111111"));
+        b3.append(new Fragment("5511111111111111551111111111111148111111111111111111111111111111"));
+        
+       m.append(new Fragment("7211117171111169691111676711111167691167116711641164116211621111"));
+        b1.append(new Fragment("4511111111111111111111111111111141111111111111111111111111111111"));
+        b2.append(new Fragment("4811111111111111111111111111111145111111111111111111111111111111"));
+        b3.append(new Fragment("5211111111111111111111111111111148111111111111111111111111111111"));
+        
+        m.append(new Fragment("60691167116711641164116211626062111111111111"));
+        b1.append(new Fragment("4811111111111111111111111111111111111111111111111111111111111111"));
+        b2.append(new Fragment("5211111111111111111111111111111111111111111111111111111111111111"));
+        b3.append(new Fragment("5511111111111111111111111111111111111111111111111111111111111111"));
+        
+        Thought whole = new Thought();
+        whole.bpm = 300;
+        whole.add(b1);
+        whole.add(b2);
+        whole.add(b3);
+        whole.add(m);
+        return whole;
+    }
+    
+    private static Thought halloween()
+    {
+        Fragment b1 = new Fragment("");
+        Fragment b2 = new Fragment("");
+        Fragment b3 = new Fragment("");
+        
+        Fragment m = new Fragment("");
+        
+        m.append(new Fragment("68616168616168616961").loop(6));
+        m.append(new Fragment("68616168616168616961").shift(-1).loop(2));
+        m.append(new Fragment("68616168616168616961").loop(2));
+        m.append(new Fragment("68616168616168616961").shift(-1).loop(2));
+        
+        b1.append(new Fragment("00000000000000000000").loop(4));
+        b1.append(new Fragment("4911111111111111111152111111111111111111"));
+        b1.append(new Fragment("5311111111111111111111111111111111111111"));
+        
+        b2.append(new Fragment("00000000000000000000").loop(4));
+        b2.append(new Fragment("4911111111111111111152111111111111111111").shift(-12));
+        b2.append(new Fragment("5311111111111111111111111111111111111111").shift(-12));
+        
+        b1.append(new Fragment("4911111111111111111152111111111111111111"));
+        b1.append(new Fragment("5311111111111111111111111111111111111111"));
+        
+        b2.append(new Fragment("4911111111111111111152111111111111111111").shift(-12));
+        b2.append(new Fragment("5311111111111111111111111111111111111111").shift(-12));
+        
+        
+        
+        m.setVolume(60);
+        Thought whole = new Thought();
+        whole.bpm = 300;
+        whole.add(b1);
+        whole.add(b2);
+        whole.add(b3);
+        whole.add(m);
+        return whole;
+    }
+    
+    private static Thought rachy()
+    {
+        Fragment f = new Fragment("");
+        
+        f.append(new Fragment("64646567676564626060626464116262"));
+        
+        //hi jonny i love youuuuuu
+        Thought whole = new Thought();
+        whole.bpm = 200;
+        whole.add(f);
+        return whole;
+    }
+    
+    private static Thought charlieBrown()
+    {
+        Fragment base1 = new Fragment("00000000");
+        Fragment base2 = new Fragment("00000000");
+        Fragment base3 = new Fragment("00000000");
+
+        Fragment melody1 = new Fragment("00000000");
+        Fragment melody2 = new Fragment("00000000");
+        Fragment melody3 = new Fragment("00000000");
+        
+        Fragment rifts1 = new Fragment("00000000");
+        Fragment rifts2 = new Fragment("00000000");
+        Fragment rifts3 = new Fragment("00000000");
+        
+        Fragment metre = new Fragment("7200").loop(5);
+        metre.setVolume(0);
+        metre.color = 2;
+        
+        melody1.append(new Fragment("646060111157571111111111").loop(2));
+        melody2.append(new Fragment("571153111100531111111111").loop(2));
+        melody3.append(new Fragment("531152111100491111111111").loop(2));
+        base1.append(new Fragment("411111114811391111111111").loop(2));
+        base2.append(new Fragment("571111111111571111111111").loop(2));
+        rifts1.append(new Fragment("00000000000000"));
+        rifts2.append(new Fragment("00000000000000"));
+        rifts3.append(new Fragment("00000000000000"));
+        rifts1.append(new Fragment("0000000072111111111111111111111111111111").setSubdivision(Note.SIXTEENTH).setVolume(80));
+        rifts2.append(new Fragment("0000006511111111111111111111111111111111").setSubdivision(Note.SIXTEENTH).setVolume(80));
+        rifts3.append(new Fragment("0000601111111111111111111111111111111111").setSubdivision(Note.SIXTEENTH).setVolume(80));
+        rifts1.append(new Fragment("000000000000000053111111000000000000000000000000000000000000000000000000"));
+        rifts2.append(new Fragment("000000000000000045111111000000000000000000000000000000000000000000000000"));
+        rifts3.append(new Fragment("000000000000000049111111000000000000000000000000000000000000000000000000"));
+        
+        
+        melody1.append(new Fragment("575353110000550000004751005300005311551111111111"));
+        melody2.append(new Fragment("535050114952525211110000505050115011521111111111"));
+        melody3.append(new Fragment("474747110000484848110000464646114611481111111111"));
+        base1.append(new Fragment("471111114611451111114411431111111111571111111111"));
+        base2.append(new Fragment("571111115611551111115411531111111111531111111111"));
+        
+        melody1.append(new Fragment("646060111157571111111111").loop(2));
+        melody2.append(new Fragment("571153111100531111111111").loop(2));
+        melody3.append(new Fragment("531152111100491111111111").loop(2));
+        base1.append(new Fragment("411111114811391111111111").loop(2));
+        base2.append(new Fragment("571111111111571111111111").loop(2));
+        rifts1.append(new Fragment("00000000000000"));
+        rifts2.append(new Fragment("00000000000000"));
+        rifts3.append(new Fragment("00000000000000"));
+        rifts1.append(new Fragment("0000000072111111111111111111111111111111").setSubdivision(Note.SIXTEENTH).setVolume(80));
+        rifts2.append(new Fragment("0000006511111111111111111111111111111111").setSubdivision(Note.SIXTEENTH).setVolume(80));
+        rifts3.append(new Fragment("0000601111111111111111111111111111111111").setSubdivision(Note.SIXTEENTH).setVolume(80));
+        rifts1.append(new Fragment("000000000000000053111111"));
+        rifts2.append(new Fragment("000000000000000045111111"));
+        rifts3.append(new Fragment("000000000000000049111111"));
+        
+        melody1.append(new Fragment("575353110000550000004751005300005311551111111111"));
+        melody2.append(new Fragment("535050114952525211110000505050115011521111111111"));
+        melody3.append(new Fragment("474747110000484848110000464646114611481111111111"));
+        base1.append(new Fragment("471111114611451111114411431111111111571111111111"));
+        base2.append(new Fragment("571111115611551111115411531111111111531111111111"));
+        
+        
+        rifts1.applyColor(2);
+        rifts2.applyColor(2);
+        rifts3.applyColor(2);
+        
+        base1.applyColor(3);
+        base2.applyColor(3);
+        base3.applyColor(3);
+        
+        base1.setVolume(90);
+        base2.setVolume(90);
+        
+        Piano.octave = -2;
+        //melody1.append(new Fragment("6460601111575711111111"));
+        //melody2.append(new Fragment("6057571111535311111111"));
+        
+        //melody1.append(new Fragment("5753531111525552521111"));
+        //melody2.append(new Fragment("5350501111485248481111"));
+        
+        //melody1.append(new Fragment("5248524811521153111111"));
+        //melody2.append(new Fragment("4845484511481150111111"));
+        
+        
+        Thought whole = new Thought();
+        whole.add(melody1.shift(12));
+        whole.add(melody2.shift(12));
+        whole.add(melody3.shift(12));
+        whole.add(rifts1.shift(12));
+        whole.add(rifts2.shift(12));
+        whole.add(rifts3.shift(12));
+        whole.add(base1);
+        whole.add(base2);
+        whole.add(base3);
+        whole.bpm = 160;
+        return whole;
+    }
+    
+    private static Thought randomSolo()
+    {
+        String[] notes = new String[] {"60","62","63","67","72"};
+        String[] rythms = new String[] {"n-nn-nn-n000","00n--n--0000","nnnnnnnnnnnn","n-n-n-n-n-n-",};
+        Fragment f = new Fragment("");
+        for(int i = 0; i < 200; i++)
+        {
+            String rythm = rythms[(int)(Math.random() * rythms.length)];
+            String out = "";
+            for(char c : rythm.toCharArray())
+            {
+                if(c == '0')
+                    out += "00";
+                else if(c == '-')
+                    out += "11";
+                else if(c == 'n')
+                    out += notes[(int)(Math.random() * notes.length)];
+                    
+                //for(int j = 0; Math.random() < .5; j++)
+                //{
+                //    out += "00";
+                //}
+            }
+            f.append(new Fragment(out));
+        }
+        f.setVolume(80);
+        
+        Fragment m = new Fragment("");
+        m.append(new Fragment("481111111148000000000000").loop(2));
+        m.append(new Fragment("531111111153000000000000").loop(2));
+        m.append(new Fragment("481111111148000000000000").loop(2));
+        m.append(new Fragment("531111111153000000000000").loop(2));
+        
+        m.append(new Fragment("551111111155000000000000"));
+        m.append(new Fragment("531111111153000000000000"));
+        m.append(new Fragment("481111111148000000000000").loop(2));
+        
+        
+        Fragment n = new Fragment("");
+        n.append(new Fragment("551111111157000000000000").loop(2));
+        n.append(new Fragment("601111111162000000000000").loop(2));
+        n.append(new Fragment("551111111157000000000000").loop(2));
+        n.append(new Fragment("601111111162000000000000").loop(2));
+        n.append(new Fragment("621111111164000000000000"));
+        n.append(new Fragment("601111111162000000000000"));
+        n.append(new Fragment("551111111157000000000000").loop(2));
+        
+        
+        m = m.loop(10);
+        n = n.loop(10);
+        
+        m.color = 2;
+        n.color = 2;
+        
+        Thought out = new Thought();
+        out.add(f);
+        out.add(m);
+        out.add(n);
+        out.bpm = 400;
+        return out;
+    }
+    
+    
+    
+    
+    private static Thought sailing()
+    {
+        Fragment base = new Fragment("");
+        Fragment melody = new Fragment("");
+        
+        base.append(new Fragment("485155605551").loop(4));
+        base.append(new Fragment("465053585350").loop(4));
+        
+        melody.append(new Fragment(base.blankLengthString()));
+        melody.append(new Fragment("721111111111671111111111701111116770721111111167"));
+        melody.append(new Fragment("671167117270671111631111701111111111111111117574"));
+        melody.append(new Fragment("721172117011671167111165671167116563601111111158"));
+        melody.append(new Fragment("601160115860631160636065671111111111111111111111"));
+        
+        base.loop(3);
+        base.setVolume(85);
+        
+        base.applyColor(3);
+        melody.applyColor(2);
+        
+        Thought whole = new Thought();
+        whole.add(base);
+        whole.add(melody);
+        whole.bpm = 240;
+        return whole;
+    }
+    
+    private static Thought chordsUp()
+    {
+        Fragment f1 = new Fragment("00000000");
+        Fragment f2 = new Fragment("00000000");
+        Fragment f3 = new Fragment("00000000");
+        Fragment f4 = new Fragment("00000000");
+        
+        f1.append(new Fragment("601111111111111111111111").setSubdivision(Note.TRIPLET));
+        f2.append(new Fragment("006411111111111111111111").setSubdivision(Note.TRIPLET));
+        f3.append(new Fragment("000067111111111111111111").setSubdivision(Note.TRIPLET));
+        f4.append(new Fragment("000000721111111111111111").setSubdivision(Note.TRIPLET));
+        
+        f1.append(new Fragment("601111111111111111111111").setSubdivision(Note.TRIPLET));
+        f2.append(new Fragment("006511111111111111111111").setSubdivision(Note.TRIPLET));
+        f3.append(new Fragment("000069111111111111111111").setSubdivision(Note.TRIPLET));
+        f4.append(new Fragment("000000741111111111111111").setSubdivision(Note.TRIPLET));
+        
+        f1.append(new Fragment("601111111111").setSubdivision(Note.TRIPLET));
+        f2.append(new Fragment("006711111111").setSubdivision(Note.TRIPLET));
+        f3.append(new Fragment("000071111111").setSubdivision(Note.TRIPLET));
+        f4.append(new Fragment("000000761111").setSubdivision(Note.TRIPLET));
+        
+        
+        f1.append(new Fragment("000000601111111111111111").setSubdivision(Note.SIXTUPLET));
+        f2.append(new Fragment("000000006711111111111111").setSubdivision(Note.SIXTUPLET));
+        f3.append(new Fragment("000000000074111111111111").setSubdivision(Note.SIXTUPLET));
+        f4.append(new Fragment("000000000000791111111111").setSubdivision(Note.SIXTUPLET));
+        
+        f1.append(new Fragment("6011601111111111").setSubdivision(Note.EIGHT));
+        f2.append(new Fragment("6711651111111111").setSubdivision(Note.EIGHT));
+        f3.append(new Fragment("7211671111111111").setSubdivision(Note.EIGHT));
+        f4.append(new Fragment("7776721111111111").setSubdivision(Note.EIGHT));
+        
+        
+        Thought whole = new Thought();
+        whole.add(f1);
+        whole.add(f2);
+        whole.add(f3);
+        whole.add(f4);
+        whole.bpm = 140;
+        return whole;
+    }
+    private static Thought snowman()
+    {
+        Fragment bells = new Fragment("");
+        Fragment bass1 = new Fragment("");
+        bells.append(new Fragment("7479847679847784").loop(4).append(new Fragment("881111111111111100008484847984888611881111")));
+        bass1.append(new Fragment("6711116011117211").loop(4).append(new Fragment("761111111111111100000000000000000000000000")));
+        bass1.color = 5;
+        Thought whole = new Thought();
+        whole.add(bells);
+        whole.add(bass1);
+        whole.bpm = 400;
+        return whole;
+    }
 
     private static Thought littleMermaid()
     {
@@ -388,7 +660,11 @@ public class Screen
         fun.append(new Fragment("60626462646567656769716971727472").setSubdivision(Note.EIGHT).shift(-7));
         fun.append(new Fragment("72716971696765676564626462605960").setSubdivision(Note.EIGHT).shift(-5));
         fun.append(new Fragment("60626462646567656769716971727472").setSubdivision(Note.EIGHT).shift(-9));
-        fun.setVolume(100);
+        fun.append(new Fragment("72716971696765676564626462605960").setSubdivision(Note.SIXTEENTH).shift(-2).loop(2));
+        fun.append(new Fragment("60626462646567656769716971727472").setSubdivision(Note.SIXTEENTH).shift(-7).loop(2));
+        fun.append(new Fragment("72716971696765676564626462605960").setSubdivision(Note.SIXTEENTH).shift(-5).loop(2));
+        fun.append(new Fragment("60626462646567656769716971727472").setSubdivision(Note.SIXTEENTH).shift(-9).loop(2));
+        fun.setVolume(70);
         
         bass1.append(new Fragment("58535551").expand(8).loop(3));
         bass2.append(new Fragment("62575855").expand(8).loop(3));
@@ -442,7 +718,7 @@ public class Screen
         whole.add(melody1);
         whole.add(melody2);
         whole.add(fun);
-        whole.bpm = 240;
+        whole.bpm = 280;
         System.out.println(whole);
         return whole;
     }
@@ -456,11 +732,11 @@ public class Screen
         Fragment rest = new Fragment("00000000000000000000000000000000");
         Fragment intr = new Fragment("62666771111111111100000000000000");
         
-        Fragment background = bgr1.append(bgr1.loop(2).append(bgr2).loop(2));
+        Fragment background = bgr1.copy().append(bgr1.copy().loop(2).append(bgr2).loop(2));
         background.setVolume(60);
-        Fragment melody = rest.append(mel1.append(mel2).loop(2));
+        Fragment melody = rest.copy().append(mel1.copy().append(mel2).loop(2));
         melody.setVolume(80);
-        Fragment interludes = rest.loop(5).append(intr.loop(2).append(intr.shift(-2).loop(2)));
+        Fragment interludes = rest.copy().loop(5).append(intr.copy().loop(2).append(intr.copy().shift(-2).loop(2)));
         interludes.setVolume(80);
         
         background.color = 5;
@@ -480,7 +756,7 @@ public class Screen
 //     {
 //         Piano.octave = -2;
 //         
-//         Fragment new Fragment("00581111621111651111621111631111671111701111671111").shift(-24);
+//         Fragment bass1 = new Fragment("00581111621111651111621111631111671111701111671111").shift(-24);
 //         Fragment bass2 = new Fragment("581111621111651111671111681111671111651111621111").shift(-24);
 //         Fragment bass3 = bass2.shift(5);
 //         Fragment bass4 = new Fragment("601111621111631111641111651111671111681111691111701111681111671111661111651111631111621111601111581111").shift(-24);
